@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,17 +12,13 @@ namespace TestEmployees
     {
         private int _currentColumnIndex = 0;
         private bool _ascending;
-        private Repository _repository = new Repository();
+        private string _connectionString;
+        private Repository _repository;
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         public MainWindow()
         {
+            _logger.Info("Запуск приложения.");
             InitializeComponent();
-            cbxSearchFlags.SelectedIndex = 0;
-            dtpEndDate.Value = DateTime.Now;
-            dtpStartDate.Value = dtpEndDate.Value.AddYears(-1);
-            cbxStatisticStatuses.DataSource = _repository.Statuses;
-            cbxStatisticStatuses.DisplayMember = "Name";
-            cbxStatisticStatuses.SelectedIndex = (cbxStatisticStatuses.DataSource as IEnumerable<Status>)?.Count() > 0 ? 0 : -1;
-            GetStatistics();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -137,7 +134,7 @@ namespace TestEmployees
             if (dgvResult.DataSource is null) return;
             if (startDate > endDate)
             {
-                txbStatisticsOutput.Text = "Ошибка!Начальная дата больше конечной даты!";
+                txbStatisticsOutput.Text = "Ошибка! Начальная дата больше конечной даты!";
                 return;
             }
             IEnumerable<ModifiedEmployee> statisticsList;
@@ -226,6 +223,45 @@ namespace TestEmployees
             }
             txbStatisticsOutput.Text = string.Empty;
             GetStatistics();
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            _repository = new Repository(string.IsNullOrEmpty(_connectionString) ? string.Empty : _connectionString, _logger);
+            while (!_repository.IsConnection)
+            {
+                MessageBox.Show("Не удалось подключиться к базе данных с указанными данными!!!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _logger.Error($"Не удалось подключиться к базе данных с указанными данными: connectionString={_connectionString}");
+                var enterConnectionString = new ConnectionStringWindow();
+                var dialogResult = enterConnectionString.ShowDialog();
+                if (dialogResult == DialogResult.OK)
+                {
+                    _connectionString = enterConnectionString.ResultConnectionString;
+                }
+                else if (dialogResult == DialogResult.Cancel)
+                {
+                    _logger.Info("Выход из приложения: инициировано пользователем.");
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    continue;
+                }
+                _repository = new Repository(string.IsNullOrEmpty(_connectionString) ? string.Empty : _connectionString, _logger);
+            }
+            _logger.Info($"Строка подключения={_connectionString}");
+            cbxSearchFlags.SelectedIndex = 0;
+            dtpEndDate.Value = DateTime.Now;
+            dtpStartDate.Value = dtpEndDate.Value.AddYears(-1);
+            cbxStatisticStatuses.DataSource = _repository.Statuses;
+            cbxStatisticStatuses.DisplayMember = "Name";
+            cbxStatisticStatuses.SelectedIndex = (cbxStatisticStatuses.DataSource as IEnumerable<Status>)?.Count() > 0 ? 0 : -1;
+            GetStatistics();
+        }
+
+        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            _logger.Info("Выход из приложения.");
         }
     }
 }

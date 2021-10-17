@@ -21,7 +21,15 @@ namespace TestEmployees.Models
             : base("name=TestDb")
         {
         }
-    
+        public TestDb(string connectionString)
+            : base("name=TestDb")
+        {
+            if (!string.IsNullOrEmpty(connectionString))
+            {
+                this.Database.Connection.ConnectionString = connectionString;
+            }            
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

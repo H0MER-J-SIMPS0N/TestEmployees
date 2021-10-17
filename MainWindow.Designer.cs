@@ -33,13 +33,13 @@ namespace TestEmployees
             this.txbSearchText = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.dgvResult = new System.Windows.Forms.DataGridView();
-            this.cbxSearchValues = new System.Windows.Forms.ComboBox();
             this.Fio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Department = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Position = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateEmploy = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateUnemploy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cbxSearchValues = new System.Windows.Forms.ComboBox();
             this.cbxStatisticStatuses = new System.Windows.Forms.ComboBox();
             this.dtpStartDate = new System.Windows.Forms.DateTimePicker();
             this.dtpEndDate = new System.Windows.Forms.DateTimePicker();
@@ -71,12 +71,12 @@ namespace TestEmployees
             // 
             this.txbSearchText.Location = new System.Drawing.Point(13, 40);
             this.txbSearchText.Name = "txbSearchText";
-            this.txbSearchText.Size = new System.Drawing.Size(638, 20);
+            this.txbSearchText.Size = new System.Drawing.Size(388, 20);
             this.txbSearchText.TabIndex = 2;
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(657, 12);
+            this.btnSearch.Location = new System.Drawing.Point(407, 13);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 48);
             this.btnSearch.TabIndex = 3;
@@ -107,15 +107,6 @@ namespace TestEmployees
             this.dgvResult.Size = new System.Drawing.Size(970, 426);
             this.dgvResult.TabIndex = 4;
             this.dgvResult.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvResult_ColumnHeaderMouseClick);
-            // 
-            // cbxSearchValues
-            // 
-            this.cbxSearchValues.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxSearchValues.FormattingEnabled = true;
-            this.cbxSearchValues.Location = new System.Drawing.Point(473, 12);
-            this.cbxSearchValues.Name = "cbxSearchValues";
-            this.cbxSearchValues.Size = new System.Drawing.Size(178, 21);
-            this.cbxSearchValues.TabIndex = 1;
             // 
             // Fio
             // 
@@ -152,6 +143,15 @@ namespace TestEmployees
             this.DateUnemploy.DataPropertyName = "DateUnemploy";
             this.DateUnemploy.HeaderText = "Дата увольнения";
             this.DateUnemploy.Name = "DateUnemploy";
+            // 
+            // cbxSearchValues
+            // 
+            this.cbxSearchValues.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxSearchValues.FormattingEnabled = true;
+            this.cbxSearchValues.Location = new System.Drawing.Point(223, 12);
+            this.cbxSearchValues.Name = "cbxSearchValues";
+            this.cbxSearchValues.Size = new System.Drawing.Size(178, 21);
+            this.cbxSearchValues.TabIndex = 1;
             // 
             // cbxStatisticStatuses
             // 
@@ -240,7 +240,7 @@ namespace TestEmployees
             // 
             // MainWindow
             // 
-            this.ClientSize = new System.Drawing.Size(1151, 761);
+            this.ClientSize = new System.Drawing.Size(1012, 750);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txbStatisticsOutput);
             this.Controls.Add(this.chbIsUneployed);
@@ -256,6 +256,8 @@ namespace TestEmployees
             this.Controls.Add(this.txbSearchText);
             this.Controls.Add(this.cbxSearchFlags);
             this.Name = "MainWindow";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
+            this.Load += new System.EventHandler(this.MainWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvResult)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
